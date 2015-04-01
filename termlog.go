@@ -3,9 +3,9 @@
 package log4go
 
 import (
+	"fmt"
 	"io"
 	"os"
-	"fmt"
 )
 
 var stdout io.Writer = os.Stdout
@@ -28,7 +28,26 @@ func (w ConsoleLogWriter) run(out io.Writer) {
 		if at := rec.Created.UnixNano() / 1e9; at != timestrAt {
 			timestr, timestrAt = rec.Created.Format("01/02/06 15:04:05"), at
 		}
-		fmt.Fprint(out, "[", timestr, "] [", levelStrings[rec.Level], "] ", rec.Message, "\n")
+		var hlColor string
+		switch rec.Level {
+		case FINEST:
+			hlColor = "[0;37"
+		case FINE:
+			hlColor = "[0;37"
+		case DEBUG:
+			hlColor = "[0;36"
+		case TRACE:
+			hlColor = ""
+		case INFO:
+			hlColor = "[0;37"
+		case WARNING:
+			hlColor = "[0;33"
+		case ERROR:
+			hlColor = "[0;31"
+		case CRITICAL:
+			hlColor = "[0;31"
+		}
+		fmt.Fprint(out, "\033", hlColor, "m", "[", timestr, "] [", levelStrings[rec.Level], "] ", rec.Message, "\033[0m\n")
 	}
 }
 
