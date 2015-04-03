@@ -47,7 +47,7 @@ func (w ConsoleLogWriter) run(out io.Writer) {
 		case CRITICAL:
 			hlColor = "[0;31"
 		}
-		fmt.Fprint(out, "\033", hlColor, "m", "[", timestr, "] [", levelStrings[rec.Level], "] ", rec.Message, "\033[0m\n")
+		fmt.Fprint(out, "\033", hlColor, "m", "[", timestr, "] [", levelStrings[rec.Level], "] ", "(", rec.Source, ") ", rec.Message, "\033[0m\n")
 	}
 }
 
